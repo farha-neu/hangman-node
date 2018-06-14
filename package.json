@@ -1,0 +1,14 @@
+{
+  "name": "hangman-node",
+  "version": "1.0.0",
+  "description": "_This one is tough! Consider doing the Flashcard assignment instead._",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "inquirer": "^6.0.0"
+  }
+}
