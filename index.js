@@ -1,8 +1,9 @@
 var Word= require("./word.js");
 var inquirer = require("inquirer");
+var chalkPipe = require("chalk-pipe");
 
 //names of fruits
-var wordArray = ["Star Fruit","Kiwi Fruit","Pineapple","Custard Apple","Apple","Coconut","Jackfruit","Grape","Honeydew"];
+var wordArray = ["Star Fruit","Kiwi Fruit","Pineapple","Custard Apple","Apple","Coconut","Jackfruit","Grape","Honeydew Melon"];
 
 //randomly select word from array
 wordArray = wordArray.sort(function() { return 0.5 - Math.random() });
@@ -26,7 +27,7 @@ function init(index){
     res = findSpaceIndex();
     //processing words with spaces
     var displayWord = spaceSeparatedWords(wordObject);
-    console.log("~~~~~~ Can you guess the fruit? ~~~~~~~\n");
+    console.log(chalkPipe('greenBright')("~~~~~~ Can you guess the fruit? ~~~~~~~\n"));
     console.log(displayWord+"\n");
     startGame(wordObject,word);
 }
@@ -47,7 +48,7 @@ function startGame(wordObject,word){
                    && wordObject.wrongLetter.indexOf(input.toLowerCase())===-1){
                 return true;
             }
-            return "Letter already guessed. Please choose another letter";
+            return "Letter already guessed. Please choose another letter.";
          }
         }
       ];    
@@ -63,39 +64,36 @@ function startGame(wordObject,word){
         
 
         if(wordObject.countCorrect() === word.length){
-            console.log('You got it right!!\n');
+            console.log(chalkPipe('greenBright')('YOU GOT IT RIGHT!!\n'));
             winFlag = 1;
             winCount++;
-            console.log("Score: Wins "+winCount+"/Losses "+lossCount+"\n");
+            console.log("Score: Wins "+winCount+" / Losses "+lossCount+"\n");
             whatNext();
         }
         //letter is not found in wrongArray. so it's a correct guess
         else if(wrongArray.indexOf(answers["answer"])===-1){
             correctGuesses.push(answers["answer"].toLowerCase());
             if(wrongArray.length>0){
-                console.log("Correct!!! [Guesses: "+wrongArray+"]\n");
+                console.log(chalkPipe('greenBright')("Correct!!!")+(chalkPipe('magentaBright')(" [Guesses: "+wrongArray+"]\n")));
             } 
             else{
-                console.log("Correct!!!\n");
+                console.log(chalkPipe('greenBright')("Correct!!!\n"));
             }
-            
-            // console.log("Wrong Guesses: "+wrongArray+"\n");
-            console.log(attempts+" attempts remaining\n");
+            console.log("Attempts remaining: "+attempts+"\n");
         }
 
         else if(wrongArray.indexOf(answers["answer"])>-1){
             attempts--;  
             if(attempts > 0){
-                 console.log("Wrong!!! [Guesses: "+wrongArray+"]\n");
-                //  console.log("Wrong Guesses: "+wrongArray+"\n");
-                 console.log(attempts+" attempts remaining\n");
+                console.log(chalkPipe('redBright')("WRONG!!!")+(chalkPipe('magentaBright')(" [Guesses: "+wrongArray+"]\n")));
+                 console.log("Attempts remaining: "+attempts+"\n");
             }
             else if(attempts <= 0){
                 lossCount++;
                 lossFlag = 1;
-                console.log("Sorry :( you lost\n");
+                console.log(chalkPipe('redBright')("SORRY :( YOU LOST!\n"));
                 console.log("Correct answer is "+wordArray[index]+"\n");
-                console.log("Score: Wins "+winCount+"/Losses "+lossCount+"\n");
+                console.log("Score: Wins "+winCount+" / Losses "+lossCount+"\n");
                 whatNext();
             }     
            

@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "chalk-pipe": "^1.2.0",
     "inquirer": "^6.0.0"
   }
 }
