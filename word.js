@@ -2,16 +2,15 @@ var Letter = require("./letter.js");
 
 var Word = function(){
      this.letters = [];
-     this.count = 0;
+     this.count = 0; //count of correctly guessed letters
      this.wrongLetter = [];
     
 
      this.addNewLetter = function(letter) {
             this.letters.push(new Letter(letter));
-         
-          
-      };
-
+     };
+     
+     //joins each letter and converts to string
      this.returnString = function(){
         var word = "";
         for(var i = 0; i < this.letters.length; i++){
@@ -21,23 +20,23 @@ var Word = function(){
         return word;
      }
 
+     //finds wrongly guessed letters which is stored in this.wrongLetters. 
+     // Also creates string based on correct and wrong guesses
      this.callGuess = function(char){
-        var wrongGuess = [];
-       
+        var wrongGuess = []; 
         for(var i = 0; i < this.letters.length; i++){
             if(this.letters[i].guess===false){
               this.letters[i].guessFunc(char);
               wrongGuess.push(this.letters[i].guess);
             }
         }
-
         if(wrongGuess.indexOf(true)===-1){
-            this.wrongLetter.push(char);   
+            this.wrongLetter.push(char.toLowerCase());   
         }
      }
 
    
-
+     //finds number of letters guessed correctly
      this.countCorrect = function(){
          var word = this.returnString();
          this.count=0;
@@ -48,9 +47,6 @@ var Word = function(){
          }
          return this.count;
      }
-
-     
-
 }
 
 module.exports = Word;

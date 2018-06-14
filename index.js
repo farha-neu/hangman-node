@@ -1,43 +1,37 @@
 var Word= require("./word.js");
 var inquirer = require("inquirer");
 
-var wordArray = ["jurassic park zoo","pineapple"];
+//names of fruits
+var wordArray = ["Star Fruit","Kiwi Fruit","Pineapple","Custard Apple","Apple","Coconut","Jackfruit","Grape","Honeydew"];
 
+//randomly select word from array
 wordArray = wordArray.sort(function() { return 0.5 - Math.random() });
 
-var attempts = 5;
+var attempts = 7;
 var index = 0;
-var res = [];
 var correctGuesses = [];
 var winCount = 0;
 var lossCount = 0;
+var res = [];
 
 function init(index){
-    var word = wordArray[index].replace(/\s/g, "");;
-  
-    var ind = 0;
-    while ((ind = wordArray[index].indexOf(' ', ind + 1)) > 0) {
-        res.push(ind);
-    }
-   
-    var wordObject = new Word();
+    var word = wordArray[index].replace(/\s/g, ""); //remove all white spaces
+    var wordObject = new Word(); //create new Word object
+
+    //add each letters
     for(var j = 0; j < word.length; j++){
         wordObject.addNewLetter(word[j]);
     }
-    
-    var wordDisplayArr =wordObject.returnString().split('');
-    for(var i = 0; i< res.length; i++){
-        wordDisplayArr.splice(res[i], 0, '');
-    }
-    var newW = wordDisplayArr.join(' ');
-    newW = newW.split('  ').join('    ');
-    console.log(newW);
+    //finds index position of spaces in a word
+    res = findSpaceIndex();
+    //processing words with spaces
+    var displayWord = spaceSeparatedWords(wordObject);
+    console.log("~~~~~~ Can you guess the fruit? ~~~~~~~\n");
+    console.log(displayWord+"\n");
     startGame(wordObject,word);
 }
 
 init(index);
-
-
 
 function startGame(wordObject,word){
     var questions = [
@@ -49,7 +43,8 @@ function startGame(wordObject,word){
             if(!input){
                 return "Please enter a letter";
             }
-            else if(correctGuesses.indexOf(input)===-1 && wordObject.wrongLetter.indexOf(input)===-1){
+            else if(correctGuesses.indexOf(input.toLowerCase())===-1 
+                   && wordObject.wrongLetter.indexOf(input.toLowerCase())===-1){
                 return true;
             }
             return "Letter already guessed. Please choose another letter";
@@ -57,77 +52,108 @@ function startGame(wordObject,word){
         }
       ];    
       inquirer.prompt(questions).then(answers => {
-        //already correct? 
         wordObject.callGuess(answers["answer"]);
        
-        var wordDisplayArr =wordObject.returnString().split('');
-        for(var i = 0; i< res.length; i++){
-            wordDisplayArr.splice(res[i], 0, '');
-        }
-        var newW = wordDisplayArr.join(' ');
-        newW = newW.split('  ').join('    ');
-        console.log(newW);
+        var displayWord = spaceSeparatedWords(wordObject);
+        console.log(displayWord+"\n");
         
         var wrongArray = wordObject.wrongLetter;
-        var win = 0;
-        //all correct
+        var winFlag = 0;
+        var lossFlag = 0;
+        
+
         if(wordObject.countCorrect() === word.length){
-            console.log('You got it right!!');
-            win = 1;
+            console.log('You got it right!!\n');
+            winFlag = 1;
             winCount++;
-            console.log("Wins:"+winCount+", Losses:"+lossCount);
+            console.log("Score: Wins "+winCount+"/Losses "+lossCount+"\n");
             whatNext();
-            // return;
         }
+        //letter is not found in wrongArray. so it's a correct guess
         else if(wrongArray.indexOf(answers["answer"])===-1){
-            correctGuesses.push(answers["answer"]);
-            console.log("Correct!");
+            correctGuesses.push(answers["answer"].toLowerCase());
+            if(wrongArray.length>0){
+                console.log("Correct!!! [Guesses: "+wrongArray+"]\n");
+            } 
+            else{
+                console.log("Correct!!!\n");
+            }
+            
+            // console.log("Wrong Guesses: "+wrongArray+"\n");
+            console.log(attempts+" attempts remaining\n");
         }
+
         else if(wrongArray.indexOf(answers["answer"])>-1){
             attempts--;  
-            console.log("Wrong Guess:"+wrongArray);
-            console.log(attempts+" attempts remaining");
+            if(attempts > 0){
+                 console.log("Wrong!!! [Guesses: "+wrongArray+"]\n");
+                //  console.log("Wrong Guesses: "+wrongArray+"\n");
+                 console.log(attempts+" attempts remaining\n");
+            }
+            else if(attempts <= 0){
+                lossCount++;
+                lossFlag = 1;
+                console.log("Sorry :( you lost\n");
+                console.log("Correct answer is "+wordArray[index]+"\n");
+                console.log("Score: Wins "+winCount+"/Losses "+lossCount+"\n");
+                whatNext();
+            }     
+           
         }
         
-        if(attempts>0 && win!=1){
+        if(attempts > 0 && winFlag===0 && lossFlag===0){
             startGame(wordObject,word);
         }
        
-        else if(attempts <= 0){
-            console.log("Sorry :( you lost");
-            console.log("Correct answer is "+word);
-            lossCount++;
-            console.log("Wins:"+winCount+", Losses:"+lossCount);
-            whatNext();
-        }       
+       
+          
       });
 }
 
 function whatNext(){
-    attempts = 5;
-    index++;
-    res = [];
-    correctGuesses = [];
-    if(index<wordArray.length){
-    inquirer
-   .prompt([
-    {
-      type: "confirm",
-      message: "Do you want to continue playing?",
-      name: "confirm",
-      default: true
-    }
-  ])
-  .then(function(inquirerResponse) {
-    if (inquirerResponse.confirm) {
-        init(index);
-    }
-    else {
-     return;
-    }
-  });  
+        //reinitialize
+        attempts = 7;
+        index++;
+        res = [];
+        correctGuesses = [];
+        if(index<wordArray.length){
+             inquirer
+                 .prompt([
+                     {
+                     type: "confirm",
+                     message: "Do you want to continue playing?",
+                     name: "confirm",
+                     default: true
+                     }
+                 ])
+                 .then(function(inquirerResponse) {
+                     if (inquirerResponse.confirm) {
+                        init(index);
+                     }
+                      else {
+                        return;
+                      }
+                 });  
+        }
+        else{
+            console.log("Game Over!!!\n");
+        }
 }
-else{
-    console.log("Game Over!");
+
+function findSpaceIndex(){
+    var ind = 0;
+    while ((ind = wordArray[index].indexOf(' ', ind + 1)) > 0) {
+        res.push(ind);
+    }
+    return res;
 }
+
+function spaceSeparatedWords(wordObject){ 
+    var wordDisplayArr =wordObject.returnString().split('');
+    for(var i = 0; i< res.length; i++){
+        wordDisplayArr.splice(res[i], 0, '');
+    }
+    var newW = wordDisplayArr.join(' ');
+    newW = newW.split('  ').join('    ');
+    return newW;
 }
