@@ -1,13 +1,21 @@
 {
   "name": "hangman-node",
   "version": "1.0.0",
-  "description": "_This one is tough! Consider doing the Flashcard assignment instead._",
+  "description": "Hangman Node game is a command line node application programmed in node.js.  \r Here a user tries to guess a fruit by guessing letters within a certain number of guesses.  \r If he/she can predict the correct word within that specific number of guesses, he/she wins.  \r Otherwise he/she loses, and the correct word is shown to his/her.  \r A user can choose to continue playing untill all the words are guessed.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/farha-neu/hangman-node.git"
+  },
   "author": "",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/farha-neu/hangman-node/issues"
+  },
+  "homepage": "https://github.com/farha-neu/hangman-node#readme",
   "dependencies": {
     "chalk-pipe": "^1.2.0",
     "inquirer": "^6.0.0"

@@ -4,6 +4,7 @@ var Word= require("./word.js");
 var inquirer = require("inquirer");
 var chalkPipe = require("chalk-pipe");
 
+
 //names of fruits
 var wordArray = ["Star Fruit","Kiwi Fruit","Pineapple","Custard Apple","Apple","Coconut","Jackfruit","Grape","Honeydew Melon"];
 
@@ -11,6 +12,7 @@ var wordArray = ["Star Fruit","Kiwi Fruit","Pineapple","Custard Apple","Apple","
 wordArray = wordArray.sort(function() { return 0.5 - Math.random() });
 
 var attempts = 7;
+var constAttempt = attempts;
 var index = 0;
 var correctGuesses = [];
 var winCount = 0;
@@ -43,7 +45,7 @@ function startGame(wordObject,word){
           name: 'answer',
           message: "Guess a letter",
           validate: function(input){
-            if(!input){
+            if(!input || input.length>1){
                 return "Please enter a letter";
             }
             else if(correctGuesses.indexOf(input.toLowerCase())===-1 
@@ -58,7 +60,7 @@ function startGame(wordObject,word){
         wordObject.callGuess(answers["answer"]);
        
         var displayWord = spaceSeparatedWords(wordObject);
-        console.log(displayWord+"\n");
+        console.log("\n"+displayWord+"\n");
         
         var wrongArray = wordObject.wrongLetter;
         var winFlag = 0;
@@ -75,20 +77,20 @@ function startGame(wordObject,word){
         //letter is not found in wrongArray. so it's a correct guess
         else if(wrongArray.indexOf(answers["answer"])===-1){
             correctGuesses.push(answers["answer"].toLowerCase());
-            if(wrongArray.length>0){
-                console.log(chalkPipe('greenBright')("Correct!!!")+(chalkPipe('magentaBright')(" [Guesses: "+wrongArray+"]\n")));
+            console.log(chalkPipe('greenBright')("Correct!!!"));
+            if(wrongArray.length>0){  
+                console.log((chalkPipe('magentaBright')("Wrong Guesses: "+wrongArray+"\n")));
             } 
-            else{
-                console.log(chalkPipe('greenBright')("Correct!!!\n"));
-            }
-            console.log("Attempts remaining: "+attempts+"\n");
+    
+            console.log("Attempts remaining: "+attempts+"/"+constAttempt+"\n");
         }
 
         else if(wrongArray.indexOf(answers["answer"])>-1){
             attempts--;  
             if(attempts > 0){
-                console.log(chalkPipe('redBright')("WRONG!!!")+(chalkPipe('magentaBright')(" [Guesses: "+wrongArray+"]\n")));
-                 console.log("Attempts remaining: "+attempts+"\n");
+                console.log(chalkPipe('redBright')("WRONG!!!"));
+                console.log((chalkPipe('magentaBright')("Wrong Guesses: "+wrongArray+"\n")));
+                console.log("Attempts remaining: "+attempts+"/"+constAttempt+"\n");
             }
             else if(attempts <= 0){
                 lossCount++;
@@ -153,7 +155,7 @@ function spaceSeparatedWords(wordObject){
     for(var i = 0; i< res.length; i++){
         wordDisplayArr.splice(res[i], 0, '');
     }
-    var newW = wordDisplayArr.join(' ');
-    newW = newW.split('  ').join('    ');
-    return newW;
+    var modifiedWord = wordDisplayArr.join(' ');
+    modifiedWord = modifiedWord.split('  ').join('    ');
+    return modifiedWord;
 }
