@@ -81,7 +81,7 @@ function startGame(wordObject,word){
             console.log(chalkPipe('greenBright')("Correct!!!\n"));
             console.log("-------------------------------");
             if(wrongArray.length>0){  
-                console.log((chalkPipe('magentaBright')("Wrong Guesses: "+wrongArray)));
+                console.log("Wrong Guesses: "+wrongArray);
             } 
     
             console.log("Attempts remaining: "+attempts+"/"+constAttempt);
@@ -93,7 +93,7 @@ function startGame(wordObject,word){
             if(attempts > 0){
                 console.log(chalkPipe('redBright')("WRONG!!!\n"));
                 console.log("-------------------------------");
-                console.log((chalkPipe('magentaBright')("Wrong Guesses: "+wrongArray)));
+                console.log("Wrong Guesses: "+wrongArray);
                 console.log("Attempts remaining: "+attempts+"/"+constAttempt);
                 console.log("-------------------------------\n");
             }
