@@ -1,7 +1,7 @@
 # Hangman Node Game   
-## "Can you guess the fruit?"    
+## <i>"Can you guess the fruit?"</i>   
 Hangman Node game is a command line node application programmed in node.js.  
-Here a user tries to guess a fruit by guessing letters within a certain number of guesses.  
-If he/she can predict the correct word within that specific number of guesses, he/she wins.  
-Otherwise he/she loses, and the correct word is shown to his/her.  
-A user can choose to continue playing untill all the words are guessed.  
+Here a user tries to guess the name of a fruit by trying different letters that appear in its spelling.   
+The user has seven(7) lives - one life is lost if the letter guessed is wrong.
+If the user can correctly uncover the name of the fruit, he/she wins.  
+The user can attempt to play as many times as he wants unless the program runs out of words.  
