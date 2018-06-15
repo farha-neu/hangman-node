@@ -45,7 +45,7 @@ function startGame(wordObject,word){
           name: 'answer',
           message: "Guess a letter",
           validate: function(input){
-            if(!input || input.length>1){
+            if(!input || input.length>1 || input===" "){
                 return "Please enter a letter";
             }
             else if(correctGuesses.indexOf(input.toLowerCase())===-1 
@@ -77,20 +77,24 @@ function startGame(wordObject,word){
         //letter is not found in wrongArray. so it's a correct guess
         else if(wrongArray.indexOf(answers["answer"])===-1){
             correctGuesses.push(answers["answer"].toLowerCase());
-            console.log(chalkPipe('greenBright')("Correct!!!"));
+            console.log(chalkPipe('greenBright')("Correct!!!\n"));
+            console.log("-------------------------------");
             if(wrongArray.length>0){  
-                console.log((chalkPipe('magentaBright')("Wrong Guesses: "+wrongArray+"\n")));
+                console.log((chalkPipe('magentaBright')("Wrong Guesses: "+wrongArray)));
             } 
     
-            console.log("Attempts remaining: "+attempts+"/"+constAttempt+"\n");
+            console.log("Attempts remaining: "+attempts+"/"+constAttempt);
+            console.log("-------------------------------\n");
         }
 
         else if(wrongArray.indexOf(answers["answer"])>-1){
             attempts--;  
             if(attempts > 0){
-                console.log(chalkPipe('redBright')("WRONG!!!"));
-                console.log((chalkPipe('magentaBright')("Wrong Guesses: "+wrongArray+"\n")));
-                console.log("Attempts remaining: "+attempts+"/"+constAttempt+"\n");
+                console.log(chalkPipe('redBright')("WRONG!!!\n"));
+                console.log("-------------------------------");
+                console.log((chalkPipe('magentaBright')("Wrong Guesses: "+wrongArray)));
+                console.log("Attempts remaining: "+attempts+"/"+constAttempt);
+                console.log("-------------------------------\n");
             }
             else if(attempts <= 0){
                 lossCount++;
