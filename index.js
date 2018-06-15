@@ -45,7 +45,8 @@ function startGame(wordObject,word){
           name: 'answer',
           message: "Guess a letter",
           validate: function(input){
-            if(!input || input.length>1 || input===" "){
+            input = input.trim();
+            if(!input || input.length>1){
                 return "Please enter a letter";
             }
             else if(correctGuesses.indexOf(input.toLowerCase())===-1 
@@ -57,7 +58,7 @@ function startGame(wordObject,word){
         }
       ];    
       inquirer.prompt(questions).then(answers => {
-        wordObject.callGuess(answers["answer"]);
+        wordObject.callGuess(answers["answer"].trim());
        
         var displayWord = spaceSeparatedWords(wordObject);
         console.log("\n"+displayWord+"\n");
